@@ -9,6 +9,24 @@ import Basket from "../Basket/Basket";
 export default function BasketPage() {
   let [mainStage, setMainStage] = useState(0);
   let [currentStage, setCurrentStage] = useState(1);
+  let [inputValue, setInputValue] = useState(
+    {
+      name:'',
+      surname:'',
+      patronymic:'',
+      tel:'',
+      email:'',
+    }
+  )
+  let [inputDeliveryValue, setInputDeliveryValue] = useState(
+    {
+      region:'',
+      city:'',
+      street:'',
+      house:'',
+      apartment:'',
+    }
+  )
   const stagesArray = [
     {
       name: "Корзина",
@@ -22,6 +40,8 @@ export default function BasketPage() {
         <ContactInformationPage
           setMainStage={setMainStage}
           setCurrentStage={setCurrentStage}
+          setInputValue={setInputValue}
+          inputValue={inputValue}
         />
       ),
     },
@@ -31,6 +51,8 @@ export default function BasketPage() {
         <DeliveryPage
           setMainStage={setMainStage}
           setCurrentStage={setCurrentStage}
+          setInputDeliveryValue={setInputDeliveryValue}
+          inputDeliveryValue={inputDeliveryValue}
         />
       ),
     },
@@ -39,7 +61,7 @@ export default function BasketPage() {
       component: <CompletionPage />,
     },
   ];
-  // console.log(currentStage);
+  // console.log(mainStage);
 
   return (
     <>
@@ -53,10 +75,10 @@ export default function BasketPage() {
                   <div
                     key={el.name}
                     onClick={() => {
-                      setMainStage(index < currentStage ? index : null);
+                      setMainStage(index < currentStage ? index : mainStage);
                     }}
                     className="order__link"
-                    href="#"
+                    // href="#"
                   >
                     <div
                       className={
