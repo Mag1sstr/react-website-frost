@@ -38,6 +38,7 @@ export default function BasketPage() {
       name: "Контактные данные",
       component: (
         <ContactInformationPage
+          
           setMainStage={setMainStage}
           setCurrentStage={setCurrentStage}
           setInputValue={setInputValue}
@@ -110,7 +111,7 @@ export default function BasketPage() {
         </div>
       </section>
       {stagesArray.map((comp, i) => {
-        return mainStage == i ? comp.component : null;
+        return mainStage == i ? <div key={i}>{comp.component}</div> : null;
       })}
     </>
   );

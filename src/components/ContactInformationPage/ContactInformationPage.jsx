@@ -1,20 +1,20 @@
 import { useState } from "react";
+import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import "./ContactInformationPage.css";
 
 export default function ContactInformationPage(props) {
-  // let [inputValue, setInputValue] = useState(
-  //   {
-  //     name:'',
-  //     surname:'',
-  //     patronymic:'',
-  //     tel:'',
-  //     email:'',
-  //   }
-  // )
   const [error, setError] = useState(false);
   const [emailError, setEmailError] = useState("");
   const re =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+  const convertPhoneNumber = (inp) => {
+    if (isValidPhoneNumber(inp, "RU")) {
+      const phoneNumber = parsePhoneNumber(inp, "RU");
+      return phoneNumber.formatNational();
+    }
+    return inp;
+  };
 
   // console.log(inputValue.surname);
 
@@ -75,14 +75,21 @@ export default function ContactInformationPage(props) {
                   <p className="contactinfo__input-text">Телефон</p>
                   <input
                     value={props.inputValue.tel}
-                    onChange={(e) =>
-                      props.setInputValue({
-                        ...props.inputValue,
-                        tel: e.target.value,
-                      })
-                    }
+                    onChange={(e) => {
+                      if (e.target.value == Number(e.target.value)) {
+                        props.setInputValue({
+                          ...props.inputValue,
+                          tel: convertPhoneNumber(e.target.value),
+                        });
+                      } else {
+                        props.setInputValue({
+                          ...props.inputValue,
+                          tel: "",
+                        });
+                      }
+                    }}
                     className="contactinfo__input"
-                    type="tel"
+                    type="text"
                     placeholder="+7 (___) ___ __ __"
                   />
                 </div>
@@ -126,7 +133,8 @@ export default function ContactInformationPage(props) {
                   props.inputValue.surname.length !== 0 &&
                   props.inputValue.patronymic.length !== 0 &&
                   props.inputValue.tel.length !== 0 &&
-                  props.inputValue.email.length !== 0
+                  props.inputValue.email.length !== 0 &&
+                  emailError.length == 0
                 ) {
                   props.setMainStage(2);
                   props.setCurrentStage(3);

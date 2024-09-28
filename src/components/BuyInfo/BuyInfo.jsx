@@ -58,7 +58,7 @@ export default function BuyInfo(props) {
               <div className="img__row">
               {cardImages.map((img,index)=>{
                 return(
-                  <img onClick={()=>setMainCardImage(index)} className="img__row-item" src={img} alt="" />
+                  <img key={index} onClick={()=>setMainCardImage(index)} className="img__row-item" src={img} alt="" />
                 )
               })}
                 {/* <img className="img__row-item" src={BuyInfoImage3} alt="" />
@@ -135,9 +135,9 @@ export default function BuyInfo(props) {
               <p className="reviews__text">
                 Чтобы оставить отзыв <a href="#">войдите на сайт</a>
               </p>
-              {reviews.map((el) => {
+              {reviews.map((el,i) => {
                 return (
-                  <div className="reviews__card">
+                  <div key={i} className="reviews__card">
                     <p className="reviews__card-title">
                       {el.user.firstName + " " + el.user.lastName}
                     </p>

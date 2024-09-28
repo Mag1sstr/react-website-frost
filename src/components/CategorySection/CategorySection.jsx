@@ -4,7 +4,6 @@ import "./CategorySection.css";
 import { useEffect, useState } from "react";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
 export default function CategorySection(props) {
-  let items = ["Смартфоны", "Наушники", "Телевизоры"];
 
   const [brandData, setBrandData] = useState([]);
   const [modelsData, setModelsData] = useState([]);
@@ -72,7 +71,7 @@ export default function CategorySection(props) {
           <div className="category__block">
             <div className="category__item">
               <p className="category__item--text">Категория</p>
-              <DropdownCategory title="Все категории" items={items} />
+              <DropdownCategory title="Все категории" items={[]} />
             </div>
             <div className="category__item">
               <p className="category__item--text">Марка</p>
