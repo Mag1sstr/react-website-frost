@@ -5,10 +5,18 @@ import basket from "../../images/basket.svg";
 import ellips from "../../images/ellips.svg";
 import { NavLink } from "react-router-dom";
 import LoginForm from "../LoginForm/LoginForm";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import RegisterForm from "../RegisterForm/RegisterForm";
+import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 
 export default function Header() {
+
+  const token = useContext(AuthContext)
+  console.log(token.token);
+  
+
+
+
   const [clickLoginModal,setClickLoginModal] = useState(false)
   const [clickRegModal,setClickRegModal] = useState(false)
 

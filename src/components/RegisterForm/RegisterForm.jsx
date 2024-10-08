@@ -9,15 +9,19 @@ export default function RegisterForm(props) {
     password: "",
     repeat_password: "",
   });
-  const [emailError, setEmailError] = useState(false);
+  let [formErrors, setFormErrors] = useState({});
+  // const [emailError, setEmailError] = useState(false);
   const [passRepeatError, setPassRepeatError] = useState(false);
   const [error, setError] = useState(false);
-  const [nameError, setNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [passError, setPassError] = useState(false);
+  // const [nameError, setNameError] = useState(false);
+  // const [lastNameError, setLastNameError] = useState(false);
+  // const [passError, setPassError] = useState(false);
 
   const re =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+
+    // console.log(formErrors);
 
   return (
     <div
@@ -32,9 +36,9 @@ export default function RegisterForm(props) {
           {error ? (
             <div style={{ color: "red" }}>Заполните все поля</div>
           ) : null}
-          {nameError ? <div style={{ color: "red" }}>{nameError}</div> : null}
-          {lastNameError ? (
-            <div style={{ color: "red" }}>{lastNameError}</div>
+          {formErrors.first_name ? <div style={{ color: "red" }}>{formErrors.first_name}</div> : null}
+          {formErrors.last_name ? (
+            <div style={{ color: "red" }}>{formErrors.last_name}</div>
           ) : null}
           <div className="register__form-row">
             <input
@@ -63,17 +67,17 @@ export default function RegisterForm(props) {
               placeholder="Фамилия"
             />
           </div>
-          {/* <div style={{ color: "red" }}>{emailError}</div> */}
-          {emailError ? <div style={{ color: "red" }}>{emailError}</div> : null}
+          
+          {formErrors.email ? <div style={{ color: "red" }}>{formErrors.email}</div> : null}
           <input
             value={registerValue.email}
             onChange={(e) => {
               setRegisterValue({ ...registerValue, email: e.target.value });
-              if (!re.test(String(e.target.value).toLowerCase())) {
-                setEmailError("Некорректный email");
-              } else {
-                setEmailError("");
-              }
+              // if (!re.test(String(e.target.value).toLowerCase())) {
+              //   setEmailError("Некорректный email");
+              // } else {
+              //   setEmailError("");
+              // }
             }}
             type="text"
             className="register__form-input"
@@ -83,7 +87,7 @@ export default function RegisterForm(props) {
             <div style={{ color: "red" }}>Повторите пароль</div>
           ) : null}
 
-          {passError ? <div style={{ color: "red" }}>{passError}</div> : null}
+          {formErrors.password ? <div style={{ color: "red" }}>{formErrors.password}</div> : null}
 
           <input
             value={registerValue.password}
@@ -134,12 +138,16 @@ export default function RegisterForm(props) {
                   })
                   .catch((err) => {
                     let errors = err.response.data.errors;
-                    setEmailError(errors.email);
-                    // console.log(errors);
 
-                    setNameError(errors.first_name);
-                    setLastNameError(errors.last_name);
-                    setPassError(errors.password);
+                    setFormErrors(errors);
+
+                    // console.log(errors);
+                    
+
+                    // setEmailError(errors.email);
+                    // setNameError(errors.first_name);
+                    // setLastNameError(errors.last_name);
+                    // setPassError(errors.password);
                   });
               }
             }}

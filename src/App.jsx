@@ -8,6 +8,7 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import ForgotPass from "./components/ForgotPass/ForgotPass";
 import BuyButtonForm from "./components/BuyButtonForm/BuyButtonForm";
 import BasketPage from "./components/BasketPage/BasketPage";
+
 function App() {
   return (
     <>
@@ -24,6 +25,8 @@ function App() {
         {/* <ForgotPass /> */}
         {/* <BuyButtonForm /> */}
         
+        
+
       </BrowserRouter>
     </>
   );
