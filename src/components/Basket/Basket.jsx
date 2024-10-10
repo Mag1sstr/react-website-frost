@@ -1,6 +1,7 @@
 import "./Basket.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NoProductPage from "../NoProductPage/NoProductPage";
+import axios from "axios";
 
 export default function Basket(props) {
   const [basketPageData, setBasketPageData] = useState([
@@ -19,6 +20,15 @@ export default function Basket(props) {
       count: 1,
     },
   ]);
+
+  // сохранить токен в localStorage и оттуда его использовать
+  useEffect(()=>{
+    axios.get('https://frost.runtime.kz/api/cart',{},{}).then((resp)=>{
+      console.log(resp);
+      
+    })
+  },[basketPageData])
+
   let sumPrice = 0;
   basketPageData.forEach((el) => {
     sumPrice += el.price;

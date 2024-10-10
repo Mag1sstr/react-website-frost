@@ -5,10 +5,12 @@ import ContactInformationPage from "../ContactInformationPage/ContactInformation
 import DeliveryPage from "../DeliveryPage/DeliveryPage";
 import CompletionPage from "../CompletionPage/CompletionPage";
 import Basket from "../Basket/Basket";
+import axios from "axios";
 
 export default function BasketPage() {
   let [mainStage, setMainStage] = useState(0);
   let [currentStage, setCurrentStage] = useState(1);
+
   let [inputValue, setInputValue] = useState(
     {
       name:'',

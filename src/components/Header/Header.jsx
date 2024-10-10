@@ -12,7 +12,7 @@ import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 export default function Header() {
 
   const token = useContext(AuthContext)
-  console.log(token.token);
+  // console.log(token.token);
   
 
 
