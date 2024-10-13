@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./BuyButtonForm.css";
+import axios from "axios";
 
 export default function BuyButtonForm(props) {
   let [count, setCount] = useState(1);
+
+  props.getCount(count)
   return (
     <div
       onClick={() => {

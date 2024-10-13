@@ -4,40 +4,37 @@ import NoProductPage from "../NoProductPage/NoProductPage";
 import axios from "axios";
 
 export default function Basket(props) {
-  const [basketPageData, setBasketPageData] = useState([
-    {
-      id: 1,
-      title:
-        "Компрессор кондиционера Hyundai Tucson, Kia Sportage 97701-2E300FD; 0935-03se;",
-      price: 95999,
-      count: 1,
-    },
-    {
-      id: 2,
-      title:
-        "Компрессор кондиционера Hyundai Elantra, Kia Sportage 97701-2E300FD; 0935-03se;",
-      price: 89000,
-      count: 1,
-    },
-  ]);
+  const [basketPageData, setBasketPageData] = useState(null);
 
   // сохранить токен в localStorage и оттуда его использовать
-  useEffect(()=>{
-    axios.get('https://frost.runtime.kz/api/cart',{},{}).then((resp)=>{
+  useEffect(() => {
+    axios.get("https://frost.runtime.kz/api/cart", {}, {}).then((resp) => {
       console.log(resp);
-      
-    })
-  },[basketPageData])
+      setBasketPageData(resp.data.items);
+    });
+  }, []);
+  console.log(basketPageData);
+  
+  
 
-  let sumPrice = 0;
-  basketPageData.forEach((el) => {
-    sumPrice += el.price;
-  });
-  let [sum, setSum] = useState(sumPrice);
+    let sumPrice = 0;
+    if(basketPageData){
 
-  if (basketPageData.length == 0) {
+      basketPageData.forEach((el) => {
+        sumPrice += el.product.price;
+      });
+    }
+    
+    let [sum, setSum] = useState(sumPrice);
+  
+
+  if (basketPageData == null) {
     return <NoProductPage />;
+  }else if(basketPageData.length == 0){
+    return <NoProductPage />;
+
   }
+
   return (
     <>
       <div style={{ marginBottom: "30px" }} className="conteiner">
@@ -84,7 +81,7 @@ export default function Basket(props) {
               <div key={el.id} className="basket__sec">
                 <div className="names__box">
                   <div className="names">
-                    <p className="names__text">{el.title}</p>
+                    <p className="names__text">{el.product.name}</p>
                   </div>
                   <div className="prices">
                     <div className="kol">
@@ -97,7 +94,7 @@ export default function Basket(props) {
                             minusCount[index].count -= 1;
                           }
                           setBasketPageData(minusCount);
-                          setSum(el.count <= 1 ? sumPrice : (sum -= el.price));
+                          setSum(el.count <= 1 ? sumPrice : (sum -= el.product.price));
                         }}
                         className="kol__buttons"
                       >
@@ -109,7 +106,7 @@ export default function Basket(props) {
                           let plusCount = [...basketPageData];
                           plusCount[index].count += 1;
                           setBasketPageData(plusCount);
-                          setSum((sum += el.price));
+                          setSum((sum += el.product.price));
                         }}
                         className="kol__buttons"
                       >
@@ -117,21 +114,24 @@ export default function Basket(props) {
                       </button>
                     </div>
                     <div className="kol">
-                      <p className="kol__numbers">{el.price * el.count} тг</p>
+                      <p className="kol__numbers">{el.product.price * el.count} тг</p>
                     </div>
                   </div>
                 </div>
                 <div className="delete">
-                  <p className="delete__text">Артикул: AC97701</p>
+                  <p className="delete__text">Артикул: {el.product.code}</p>
                   <button
                     onClick={() => {
                       let copyData = [...basketPageData];
                       let filteredData = copyData.filter(
-                        (item) => item.id !== el.id
+                        (item) => {
+                          // console.log(item.product.id, el.product.id)
+                          return item.product.id !== el.product.id
+                        }
                       );
                       setBasketPageData(filteredData);
 
-                      setSum((sum -= el.price * el.count));
+                      setSum((sum -= el.product.price * el.count));
                     }}
                     href="#!"
                     className="delete__link"
