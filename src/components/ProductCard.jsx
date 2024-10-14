@@ -5,13 +5,7 @@ import BuyButtonForm from "./BuyButtonForm/BuyButtonForm";
 import axios from "axios";
 export default function ProductCard(props) {
   const [clickBuyBtn, setClickBuyBtn] = useState(false);
-  const [count,setCount] = useState(null)
 
-  
-  function getCount(count){
-    setCount(count)
-  }
-  
   return (
     <>
       <div className="card">
@@ -24,12 +18,8 @@ export default function ProductCard(props) {
             <p className="card__price">{props.price} тг</p>
 
             <button
-              onClick={() =>{
-                setClickBuyBtn(!clickBuyBtn)
-                axios.get(`https://frost.runtime.kz/api/cart/add?productId=${props.id}&count=${count}`).then((resp)=>{
-                  console.log(resp);
-                  
-                })
+              onClick={() => {
+                setClickBuyBtn(!clickBuyBtn);
               }}
               className="card-btn"
             >
@@ -40,7 +30,6 @@ export default function ProductCard(props) {
               setClickBuyBtn={setClickBuyBtn}
               clickCardText={props.text}
               id={props.id}
-              getCount={getCount}
             />
           </div>
         </div>

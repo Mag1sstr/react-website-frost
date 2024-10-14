@@ -2,37 +2,31 @@ import "./Basket.css";
 import { useEffect, useState } from "react";
 import NoProductPage from "../NoProductPage/NoProductPage";
 import axios from "axios";
+import LoadingAnim from "../LoadingAnim/LoadingAnim";
 
 export default function Basket(props) {
   const [basketPageData, setBasketPageData] = useState(null);
+  let [sum, setSum] = useState(0);
 
   // сохранить токен в localStorage и оттуда его использовать
   useEffect(() => {
     axios.get("https://frost.runtime.kz/api/cart", {}, {}).then((resp) => {
       console.log(resp);
+
       setBasketPageData(resp.data.items);
+      let sumPrice = 0;
+      for (let el of resp.data.items) {
+        sumPrice += el.product.price * el.count;
+      }
+      setSum(sumPrice);
     });
   }, []);
-  console.log(basketPageData);
-  
-  
-
-    let sumPrice = 0;
-    if(basketPageData){
-
-      basketPageData.forEach((el) => {
-        sumPrice += el.product.price;
-      });
-    }
-    
-    let [sum, setSum] = useState(sumPrice);
-  
+  // console.log(basketPageData);
 
   if (basketPageData == null) {
+    return <LoadingAnim />;
+  } else if (basketPageData.length == 0) {
     return <NoProductPage />;
-  }else if(basketPageData.length == 0){
-    return <NoProductPage />;
-
   }
 
   return (
@@ -94,7 +88,11 @@ export default function Basket(props) {
                             minusCount[index].count -= 1;
                           }
                           setBasketPageData(minusCount);
-                          setSum(el.count <= 1 ? sumPrice : (sum -= el.product.price));
+                          setSum(
+                            el.count <= 1
+                              ? el.product.price * el.count
+                              : (sum -= el.product.price)
+                          );
                         }}
                         className="kol__buttons"
                       >
@@ -114,7 +112,9 @@ export default function Basket(props) {
                       </button>
                     </div>
                     <div className="kol">
-                      <p className="kol__numbers">{el.product.price * el.count} тг</p>
+                      <p className="kol__numbers">
+                        {el.product.price * el.count} тг
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -122,13 +122,14 @@ export default function Basket(props) {
                   <p className="delete__text">Артикул: {el.product.code}</p>
                   <button
                     onClick={() => {
-                      let copyData = [...basketPageData];
-                      let filteredData = copyData.filter(
-                        (item) => {
-                          // console.log(item.product.id, el.product.id)
-                          return item.product.id !== el.product.id
-                        }
+                      axios.get(
+                        `https://frost.runtime.kz/api/cart/delete?productId=${el.product.id}`
                       );
+
+                      let copyData = [...basketPageData];
+                      let filteredData = copyData.filter((item) => {
+                        return item.product.id !== el.product.id;
+                      });
                       setBasketPageData(filteredData);
 
                       setSum((sum -= el.product.price * el.count));

@@ -5,7 +5,6 @@ import axios from "axios";
 export default function BuyButtonForm(props) {
   let [count, setCount] = useState(1);
 
-  props.getCount(count)
   return (
     <div
       onClick={() => {
@@ -40,7 +39,20 @@ export default function BuyButtonForm(props) {
         </div>
 
         <div className="addBasket__column">
-          <button className="addBasket__column-btn">Оформить заказ</button>
+          <button
+            onClick={() => {
+              axios
+                .get(
+                  `https://frost.runtime.kz/api/cart/add?productId=${props.id}&count=${count}`
+                )
+                .then((resp) => {
+                  console.log(resp);
+                });
+            }}
+            className="addBasket__column-btn"
+          >
+            Оформить заказ
+          </button>
           <button className="addBasket__column-btn addBasket__column-btn-continue">
             Продолжить выбор товаров
           </button>
