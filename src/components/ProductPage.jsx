@@ -102,6 +102,7 @@ export default function ProductPage(props) {
                 text={el.name}
                 price={el.price}
                 id={el.id}
+                available={el.available}
               />
               // </NavLink>
             );

@@ -4,6 +4,10 @@ import NoProductPage from "../NoProductPage/NoProductPage";
 import axios from "axios";
 import LoadingAnim from "../LoadingAnim/LoadingAnim";
 
+// `/api/cart/increase?productId=...` - увеличивыает кол-во на 1.
+
+// `/api/cart/decrease?productId=...` - уменьшает кол-во на 1.
+
 export default function Basket(props) {
   const [basketPageData, setBasketPageData] = useState(null);
   let [sum, setSum] = useState(0);
@@ -21,7 +25,6 @@ export default function Basket(props) {
       setSum(sumPrice);
     });
   }, []);
-  // console.log(basketPageData);
 
   if (basketPageData == null) {
     return <LoadingAnim />;
@@ -93,6 +96,8 @@ export default function Basket(props) {
                               ? el.product.price * el.count
                               : (sum -= el.product.price)
                           );
+
+                          axios.get(`https://frost.runtime.kz/api/cart/decrease?productId=${el.product.id}`)
                         }}
                         className="kol__buttons"
                       >
@@ -105,6 +110,8 @@ export default function Basket(props) {
                           plusCount[index].count += 1;
                           setBasketPageData(plusCount);
                           setSum((sum += el.product.price));
+
+                          axios.get(`https://frost.runtime.kz/api/cart/increase?productId=${el.product.id}`)
                         }}
                         className="kol__buttons"
                       >

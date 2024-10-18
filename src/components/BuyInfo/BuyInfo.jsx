@@ -6,20 +6,27 @@ import BuyInfoImage4 from "../../images/buyinfo/04.png";
 import BuyInfoImage5 from "../../images/buyinfo/05.png";
 import PointImage from "../../images/buyinfo/point.svg";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingAnim from "../LoadingAnim/LoadingAnim";
 import notAvailableImage from "../../images/buyinfo/notAvailableImage.svg";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 
 export default function BuyInfo(props) {
   const [buyinfoData, setBuyinfoData] = useState(null);
   const [reviews, setReviews] = useState([]);
 
-  const [cardImages, setCardImages] = useState([BuyInfoImage1,BuyInfoImage3,BuyInfoImage4,BuyInfoImage5])
-  const [mainCardImage,setMainCardImage] = useState(0)
+  const [cardImages, setCardImages] = useState([
+    BuyInfoImage1,
+    BuyInfoImage3,
+    BuyInfoImage4,
+    BuyInfoImage5,
+  ]);
+  const [mainCardImage, setMainCardImage] = useState(0);
   // const [productId, setProductId] = useState(props.clickCardId);
+  const user = useContext(AuthContext);
 
-  const params = useParams()
+  const params = useParams();
 
   useEffect(() => {
     axios
@@ -54,13 +61,23 @@ export default function BuyInfo(props) {
                     97701-2E300
                   </h3>
                 </div> */}
-              <img className="buyinfo__box-img" src={cardImages[mainCardImage]} alt="" />
+              <img
+                className="buyinfo__box-img"
+                src={cardImages[mainCardImage]}
+                alt=""
+              />
               <div className="img__row">
-              {cardImages.map((img,index)=>{
-                return(
-                  <img key={index} onClick={()=>setMainCardImage(index)} className="img__row-item" src={img} alt="" />
-                )
-              })}
+                {cardImages.map((img, index) => {
+                  return (
+                    <img
+                      key={index}
+                      onClick={() => setMainCardImage(index)}
+                      className="img__row-item"
+                      src={img}
+                      alt=""
+                    />
+                  );
+                })}
                 {/* <img className="img__row-item" src={BuyInfoImage3} alt="" />
                 <img className="img__row-item" src={BuyInfoImage4} alt="" />
                 <img className="img__row-item" src={BuyInfoImage5} alt="" /> */}
@@ -131,11 +148,24 @@ export default function BuyInfo(props) {
                 </div>
               </div> */}
             <div className="reviews__inner">
-              <h3 className="reviews__title">Отзывы</h3>
-              <p className="reviews__text">
-                Чтобы оставить отзыв <a href="#">войдите на сайт</a>
-              </p>
-              {reviews.map((el,i) => {
+              {user.user ? (
+                <div className="auth__reviews">
+                  <input
+                    className="auth__reviews-input"
+                    type="text"
+                    placeholder="Поделитесь своими впечатлениями о товаре."
+                  />
+                  <button className="auth__reviews-btn">Оставить отзыв</button>
+                </div>
+              ) : (
+                <div>
+                  <h3 className="reviews__title">Отзывы</h3>
+                  <p className="reviews__text">
+                    Чтобы оставить отзыв <a href="#">войдите на сайт</a>
+                  </p>
+                </div>
+              )}
+              {reviews.map((el, i) => {
                 return (
                   <div key={i} className="reviews__card">
                     <p className="reviews__card-title">

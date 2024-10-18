@@ -30,6 +30,7 @@ export default function ProductCard(props) {
               setClickBuyBtn={setClickBuyBtn}
               clickCardText={props.text}
               id={props.id}
+              available={props.available}
             />
           </div>
         </div>

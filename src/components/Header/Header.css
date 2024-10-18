@@ -76,6 +76,14 @@ a {
   font-size: 16px;
   color: #fff;
 }
+.auth__user-btn{
+  font-size: 16px;
+  color: #fff;
+  background: none;
+  border: none;
+  text-align: start;
+  cursor: pointer;
+}
 .header__basket {
   position: relative;
 }

@@ -14,9 +14,12 @@ export default function AuthContextProvider({ children }) {
         .post("https://frost.runtime.kz/api/auth/user", {}, {})
         .then((resp) => {
           console.log(resp);
+          setUser(resp.data)
         });
     }
   }, [tokenInfo]);
+  // console.log(user);
+  
 
   function signIn(username, password) {
     axios
@@ -40,10 +43,12 @@ export default function AuthContextProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
-        user: null,
+        user: user,
+        setUser: setUser,
         signIn: signIn,
         signOut: null,
         token: tokenInfo,
+        setTokenInfo:setTokenInfo,
       }}
     >
       {children}

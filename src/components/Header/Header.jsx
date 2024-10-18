@@ -11,7 +11,7 @@ import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 
 export default function Header() {
 
-  const token = useContext(AuthContext)
+  const user = useContext(AuthContext)
   // console.log(token.token);
   
 
@@ -58,7 +58,9 @@ export default function Header() {
             />
             <img src={inputSearch} alt="" className="header__input-img" />
           </div>
-          <div className="header__reg">
+          {user.user == null ? (
+
+            <div className="header__reg">
             <a onClick={()=>{
               setClickLoginModal(!clickLoginModal)
             }}  href="#">Вход в личный кабинет</a>
@@ -68,6 +70,23 @@ export default function Header() {
             }} href="#">Зарегистрироваться</a>
             <RegisterForm style={clickRegModal ? 'open' : null} getClickRegModal={getClickRegModal}/>
           </div>
+          )
+            : (
+              <div className="header__reg">
+                <button className="auth__user-btn">
+                  {`${user.user.firstName} ${user.user.lastName}(${user.user.email})`}
+                </button>
+                <button onClick={()=>{
+                  user.setUser(null)
+                  user.setTokenInfo(null)
+                  localStorage.setItem('token', null)
+                }} className="auth__user-btn">
+                  Выйти
+                </button>
+              </div>
+            )
+
+          }
           <NavLink to='/basket' className="header__basket">
             <img src={basket} alt="" />
             <img src={ellips} alt="" className="ellips" />

@@ -146,3 +146,30 @@
 .reviews__card-text {
   font-size: 16px;
 }
+
+.auth__reviews {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.auth__reviews-input {
+  display: flex;
+  text-align: start;
+  outline: none;
+  border: 2px solid #e5e5e5;
+  padding: 15px 10px 70px 10px;
+  font-size: 16px;
+}
+.auth__reviews-input::placeholder {
+  color: #7a7a7a;
+}
+.auth__reviews-btn {
+  width: 177px;
+  cursor: pointer;
+  padding: 8px 0;
+  border: none;
+  background-color: #2156bd;
+  color: #fff;
+}

@@ -64,6 +64,7 @@ export default function LoginForm(props) {
               // }).catch(()=>{
               //   setRequestError(!requestError)
               // })
+              props.getClickLoginModal(false)
             }
           }} className="login__form-btn">Войти</button>
           <button className="login__form-btn reg">
