@@ -4,7 +4,7 @@ import A from "./A";
 
 export const AuthContext = createContext();
 export default function AuthContextProvider({ children }) {
-  const [tokenInfo, setTokenInfo] = useState(localStorage.getItem('token'));
+  const [tokenInfo, setTokenInfo] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -14,12 +14,11 @@ export default function AuthContextProvider({ children }) {
         .post("https://frost.runtime.kz/api/auth/user", {}, {})
         .then((resp) => {
           console.log(resp);
-          setUser(resp.data)
+          setUser(resp.data);
         });
     }
   }, [tokenInfo]);
   // console.log(user);
-  
 
   function signIn(username, password) {
     axios
@@ -35,6 +34,20 @@ export default function AuthContextProvider({ children }) {
         // setRequestError(!requestError)
       });
   }
+  function newOrder(phone, area, city, street, house, apartment) {
+    axios
+      .post("https://frost.runtime.kz/api/orders", {
+        phone,
+        area,
+        city,
+        street,
+        house,
+        apartment,
+      })
+      .then((resp) => {
+        console.log(resp);
+      });
+  }
 
   // console.log(user);
 
@@ -48,7 +61,8 @@ export default function AuthContextProvider({ children }) {
         signIn: signIn,
         signOut: null,
         token: tokenInfo,
-        setTokenInfo:setTokenInfo,
+        setTokenInfo: setTokenInfo,
+        newOrder: newOrder,
       }}
     >
       {children}

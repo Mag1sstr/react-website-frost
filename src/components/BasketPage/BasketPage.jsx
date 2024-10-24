@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./BasketPage.css";
 import NoProductPage from "../NoProductPage/NoProductPage";
 import ContactInformationPage from "../ContactInformationPage/ContactInformationPage";
@@ -6,29 +6,28 @@ import DeliveryPage from "../DeliveryPage/DeliveryPage";
 import CompletionPage from "../CompletionPage/CompletionPage";
 import Basket from "../Basket/Basket";
 import axios from "axios";
+import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 
 export default function BasketPage() {
   let [mainStage, setMainStage] = useState(0);
   let [currentStage, setCurrentStage] = useState(1);
 
-  let [inputValue, setInputValue] = useState(
-    {
-      name:'',
-      surname:'',
-      patronymic:'',
-      tel:'',
-      email:'',
-    }
-  )
-  let [inputDeliveryValue, setInputDeliveryValue] = useState(
-    {
-      region:'',
-      city:'',
-      street:'',
-      house:'',
-      apartment:'',
-    }
-  )
+  let [inputValue, setInputValue] = useState({
+    name: "",
+    surname: "",
+    patronymic: "",
+    tel: "",
+    email: "",
+  });
+  let [inputDeliveryValue, setInputDeliveryValue] = useState({
+    region: "",
+    city: "",
+    street: "",
+    house: "",
+    apartment: "",
+  });
+  // const newOrder = useContext(AuthContext);
+
   const stagesArray = [
     {
       name: "Корзина",
@@ -40,7 +39,6 @@ export default function BasketPage() {
       name: "Контактные данные",
       component: (
         <ContactInformationPage
-          
           setMainStage={setMainStage}
           setCurrentStage={setCurrentStage}
           setInputValue={setInputValue}
@@ -56,6 +54,12 @@ export default function BasketPage() {
           setCurrentStage={setCurrentStage}
           setInputDeliveryValue={setInputDeliveryValue}
           inputDeliveryValue={inputDeliveryValue}
+          tel={inputValue.tel}
+          area={inputDeliveryValue.region}
+          city={inputDeliveryValue.city}
+          street={inputDeliveryValue.street}
+          house={inputDeliveryValue.house}
+          apartment={inputDeliveryValue.apartment}
         />
       ),
     },

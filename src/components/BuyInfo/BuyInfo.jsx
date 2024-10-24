@@ -28,6 +28,9 @@ export default function BuyInfo(props) {
 
   const params = useParams();
 
+  let [textValue,setTextValue] = useState('')
+  const [reviewsError,setReviewsError] = useState(false)
+
   useEffect(() => {
     axios
       .get(`https://frost.runtime.kz/api/products/${params.id}`)
@@ -45,10 +48,17 @@ export default function BuyInfo(props) {
       });
   }, [params]);
 
+  useEffect(()=>{
+    axios.get(`https://frost.runtime.kz/api/reviews/exists?productId=${params.id}`).then((resp)=>{
+      console.log(resp.data);
+      setReviewsError(resp.data)
+    })
+  },[])
+
   if (buyinfoData === null) {
     return <LoadingAnim />;
   }
-
+  
   return (
     <section className="buyinfo">
       <div className="conteiner">
@@ -150,12 +160,33 @@ export default function BuyInfo(props) {
             <div className="reviews__inner">
               {user.user ? (
                 <div className="auth__reviews">
-                  <input
+                  {reviewsError ?
+                    <div style={{fontSize:'18px',fontWeight:'600'}}>Вы уже оставили отзыв на товар</div>
+
+                    :
+                  <div className="auth__reviews">
+                  <textarea
                     className="auth__reviews-input"
+                    value={textValue}
+                    onChange={(e)=>setTextValue(e.target.value)}
                     type="text"
                     placeholder="Поделитесь своими впечатлениями о товаре."
-                  />
-                  <button className="auth__reviews-btn">Оставить отзыв</button>
+                    ></textarea>
+                  <button onClick={()=>{
+                    axios.post('https://frost.runtime.kz/api/reviews',{
+                      product_id: params.id,
+                      review: textValue,
+                    }).then((resp)=>{
+                      console.log(resp);
+                      
+                      let copyReviews = [...reviews]
+                      copyReviews.unshift(resp.data)
+                      setReviews(copyReviews)
+                      window.location.reload() 
+                    })    
+                  }} className="auth__reviews-btn">Оставить отзыв</button>
+                  </div>
+                }
                 </div>
               ) : (
                 <div>
