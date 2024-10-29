@@ -97,7 +97,9 @@ export default function Basket(props) {
                               : (sum -= el.product.price)
                           );
 
-                          axios.get(`https://frost.runtime.kz/api/cart/decrease?productId=${el.product.id}`)
+                          axios.get(
+                            `https://frost.runtime.kz/api/cart/decrease?productId=${el.product.id}`
+                          );
                         }}
                         className="kol__buttons"
                       >
@@ -111,7 +113,9 @@ export default function Basket(props) {
                           setBasketPageData(plusCount);
                           setSum((sum += el.product.price));
 
-                          axios.get(`https://frost.runtime.kz/api/cart/increase?productId=${el.product.id}`)
+                          axios.get(
+                            `https://frost.runtime.kz/api/cart/increase?productId=${el.product.id}`
+                          );
                         }}
                         className="kol__buttons"
                       >

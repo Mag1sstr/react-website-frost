@@ -1,23 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import "./ContactInformationPage.css";
+import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
 
 export default function ContactInformationPage(props) {
-  
   const [error, setError] = useState(false);
   const [emailError, setEmailError] = useState("");
   const re =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-    const convertPhoneNumber = (inp) => {
-      if (isValidPhoneNumber(inp, 'RU')) {
-        const phoneNumber = parsePhoneNumber(inp, 'RU')
-        return phoneNumber.formatNational()
-      }
-      return inp
+  const convertPhoneNumber = (inp) => {
+    if (isValidPhoneNumber(inp, "RU")) {
+      const phoneNumber = parsePhoneNumber(inp, "RU");
+      return phoneNumber.formatNational();
     }
+    return inp;
+  };
 
   // console.log(inputValue.surname);
+  // const user = useContext(AuthContext);
+  // console.log(user.user);
 
   return (
     <>
@@ -76,22 +78,19 @@ export default function ContactInformationPage(props) {
                   <p className="contactinfo__input-text">Телефон</p>
                   <input
                     value={props.inputValue.tel}
-                    onChange={(e) =>{
-                      if(e.target.value == Number(e.target.value)){
-
+                    onChange={(e) => {
+                      if (e.target.value == Number(e.target.value)) {
                         props.setInputValue({
                           ...props.inputValue,
-                          tel:convertPhoneNumber(e.target.value),
-                        })
-                      }else{
+                          tel: convertPhoneNumber(e.target.value),
+                        });
+                      } else {
                         props.setInputValue({
                           ...props.inputValue,
-                          tel: '',
-                        })
+                          tel: "",
+                        });
                       }
-                    }
-                      
-                    }
+                    }}
                     className="contactinfo__input"
                     type="text"
                     placeholder="+7 (___) ___ __ __"

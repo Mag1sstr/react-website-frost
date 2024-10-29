@@ -12,12 +12,14 @@ export default function BasketPage() {
   let [mainStage, setMainStage] = useState(0);
   let [currentStage, setCurrentStage] = useState(1);
 
+  const user = useContext(AuthContext);
+
   let [inputValue, setInputValue] = useState({
-    name: "",
-    surname: "",
+    name: user.user ? user.user.firstName : "",
+    surname: user.user ? user.user.lastName : "",
     patronymic: "",
     tel: "",
-    email: "",
+    email: user.user ? user.user.email : "",
   });
   let [inputDeliveryValue, setInputDeliveryValue] = useState({
     region: "",
