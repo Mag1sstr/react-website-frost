@@ -4,16 +4,23 @@ import personalImage2 from "./../../images/personal/02.svg";
 import personalImage3 from "./../../images/personal/03.svg";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import PersonalMyOrders from "../PersonalMyOrders/PersonalMyOrders";
+import PersonalContactInfo from "../PersonalContactInfo/PersonalContactInfo";
 
 export default function Personal() {
-  const [ordersData, setOrdersData] = useState([]);
-  useEffect(() => {
-    axios.get("https://frost.runtime.kz/api/orders").then((resp) => {
-      //  console.log(resp)
-      setOrdersData(resp.data);
-    });
-  }, []);
-  //   console.log(ordersData);
+  const [mainStage, setMainStage] = useState(0);
+  const personalStages = [
+    {
+      name: "Мои заказы",
+      image: personalImage1,
+      component: <PersonalMyOrders />,
+    },
+    {
+      name: "Контактные данные",
+      image: personalImage2,
+      component: <PersonalContactInfo />,
+    },
+  ];
 
   return (
     <section className="personal">
@@ -21,75 +28,24 @@ export default function Personal() {
         <h3 className="personal__title">Личный кабинет</h3>
         <div className="personal__row">
           <div className="my__order">
-            <button className="my__order-link">
-              <div className="order__linkrow">
-                <img className="my__order-img" src={personalImage1} alt="" />
-                <p>Мои заказы</p>
-              </div>
-            </button>
-            <button className="my__order-link">
-              <div className="order__linkrow">
-                <img src={personalImage2} alt="" />
-                <p>Контактные данные</p>
-              </div>
-            </button>
-            <button className="my__order-link">
-              <div className="order__linkrow">
-                <img src={personalImage3} alt="" />
-                <p>Доставка</p>
-              </div>
-            </button>
-          </div>
-          <div className="history">
-            <h3 className="history__title">История заказов</h3>
-            <div className="history__row">
-              <div className="number__name">
-                <p>Номер заказа</p>
-                <p>Наименование товара</p>
-              </div>
-              <div className="date__price">
-                <p>Дата заказа</p>
-                <p>Стоимость</p>
-              </div>
-            </div>
-            {ordersData.map((el) => {
-              let sumPrice = 0;
-              for (let i of el.items) {
-                sumPrice += i.product.price * i.count;
-              }
+            {personalStages.map((el, index) => {
               return (
-                <div key={el.id} className="history__product-row">
-                  <p className="history__product-number">№{el.id}</p>
-                  <div className="history__product-column">
-                    {el.items.map((item) => {
-                      return (
-                        <p className="history__product-text">
-                          {item.product.name}
-                        </p>
-                      );
-                    })}
+                <button
+                  onClick={() => setMainStage(index)}
+                  key={el.name}
+                  className="my__order-link"
+                >
+                  <div className="order__linkrow">
+                    <img className="my__order-img" src={el.image} alt="" />
+                    <p>{el.name}</p>
                   </div>
-
-                  <p>{new Date(el.created_at).toLocaleString()}</p>
-
-                  <div key={el.id} className="history__product-column">
-                    {sumPrice}
-                  </div>
-                </div>
+                </button>
               );
             })}
-            {/* <div className="history__product-row">
-                     <p className="history__product-number">№100001</p>
-                     <p className="history__product-text">
-                        Компрессор кондиционера Hyundai Tucson, Kia Sportage
-                        97701-2E300FD; 0935-03se; Kia Sportage 97701-2E300FD;
-                        0935-02
-                     </p>
-
-                     <p>06.07.2019</p>
-                     <p>206 998 тг</p>
-                  </div> */}
           </div>
+          {personalStages.map((el, index) => {
+            return index == mainStage ? <div>{el.component}</div> : null;
+          })}
         </div>
       </div>
     </section>
