@@ -11,6 +11,7 @@ import LoadingAnim from "../LoadingAnim/LoadingAnim";
 import notAvailableImage from "../../images/buyinfo/notAvailableImage.svg";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
+import { useSelector } from "react-redux";
 
 export default function BuyInfo(props) {
   const [buyinfoData, setBuyinfoData] = useState(null);
@@ -24,12 +25,13 @@ export default function BuyInfo(props) {
   ]);
   const [mainCardImage, setMainCardImage] = useState(0);
   // const [productId, setProductId] = useState(props.clickCardId);
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
+  const user = useSelector((state) => state.auth.user);
 
   const params = useParams();
 
-  let [textValue,setTextValue] = useState('')
-  const [reviewsError,setReviewsError] = useState(false)
+  let [textValue, setTextValue] = useState("");
+  const [reviewsError, setReviewsError] = useState(false);
 
   useEffect(() => {
     axios
@@ -48,17 +50,19 @@ export default function BuyInfo(props) {
       });
   }, [params]);
 
-  useEffect(()=>{
-    axios.get(`https://frost.runtime.kz/api/reviews/exists?productId=${params.id}`).then((resp)=>{
-      console.log(resp.data);
-      setReviewsError(resp.data)
-    })
-  },[])
+  useEffect(() => {
+    axios
+      .get(`https://frost.runtime.kz/api/reviews/exists?productId=${params.id}`)
+      .then((resp) => {
+        console.log(resp.data);
+        setReviewsError(resp.data);
+      });
+  }, []);
 
   if (buyinfoData === null) {
     return <LoadingAnim />;
   }
-  
+
   return (
     <section className="buyinfo">
       <div className="conteiner">
@@ -158,35 +162,43 @@ export default function BuyInfo(props) {
                 </div>
               </div> */}
             <div className="reviews__inner">
-              {user.user ? (
+              {user ? (
                 <div className="auth__reviews">
-                  {reviewsError ?
-                    <div style={{fontSize:'18px',fontWeight:'600'}}>Вы уже оставили отзыв на товар</div>
+                  {reviewsError ? (
+                    <div style={{ fontSize: "18px", fontWeight: "600" }}>
+                      Вы уже оставили отзыв на товар
+                    </div>
+                  ) : (
+                    <div className="auth__reviews">
+                      <textarea
+                        className="auth__reviews-input"
+                        value={textValue}
+                        onChange={(e) => setTextValue(e.target.value)}
+                        type="text"
+                        placeholder="Поделитесь своими впечатлениями о товаре."
+                      ></textarea>
+                      <button
+                        onClick={() => {
+                          axios
+                            .post("https://frost.runtime.kz/api/reviews", {
+                              product_id: params.id,
+                              review: textValue,
+                            })
+                            .then((resp) => {
+                              console.log(resp);
 
-                    :
-                  <div className="auth__reviews">
-                  <textarea
-                    className="auth__reviews-input"
-                    value={textValue}
-                    onChange={(e)=>setTextValue(e.target.value)}
-                    type="text"
-                    placeholder="Поделитесь своими впечатлениями о товаре."
-                    ></textarea>
-                  <button onClick={()=>{
-                    axios.post('https://frost.runtime.kz/api/reviews',{
-                      product_id: params.id,
-                      review: textValue,
-                    }).then((resp)=>{
-                      console.log(resp);
-                      
-                      let copyReviews = [...reviews]
-                      copyReviews.unshift(resp.data)
-                      setReviews(copyReviews)
-                      window.location.reload() 
-                    })    
-                  }} className="auth__reviews-btn">Оставить отзыв</button>
-                  </div>
-                }
+                              let copyReviews = [...reviews];
+                              copyReviews.unshift(resp.data);
+                              setReviews(copyReviews);
+                              window.location.reload();
+                            });
+                        }}
+                        className="auth__reviews-btn"
+                      >
+                        Оставить отзыв
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>

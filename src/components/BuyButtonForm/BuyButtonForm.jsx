@@ -2,13 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import "./BuyButtonForm.css";
 import axios from "axios";
 import { AuthContext } from "../../contexts/Auth/AuthContextProvider";
+import { useSelector } from "react-redux";
 
 export default function BuyButtonForm(props) {
   let [count, setCount] = useState(1);
-  const [availableError,setAvailableError] = useState(false)
-  const [userError,setUserError] = useState(false)
+  const [availableError, setAvailableError] = useState(false);
+  const [userError, setUserError] = useState(false);
 
-  const user = useContext(AuthContext)
+  // const user = useContext(AuthContext)
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <div
@@ -22,8 +24,12 @@ export default function BuyButtonForm(props) {
         <p className="addBasket__title">Товар добавлен в корзину</p>
         <p className="addBasket__text">{props.clickCardText}</p>
 
-        {availableError ? <div style={{color:'red'}}>Товара нет в наличии</div> : null}
-        {userError ? <div style={{color:'red'}}>Вы должны авторизоваться</div> : null}
+        {availableError ? (
+          <div style={{ color: "red" }}>Товара нет в наличии</div>
+        ) : null}
+        {userError ? (
+          <div style={{ color: "red" }}>Вы должны авторизоваться</div>
+        ) : null}
 
         <div className="addBasket__block">
           <p className="addBasket__block-text">Укажите количество:</p>
@@ -49,10 +55,10 @@ export default function BuyButtonForm(props) {
         <div className="addBasket__column">
           <button
             onClick={() => {
-              if(user.user == null){
-                return setUserError(!userError)
+              if (user == null) {
+                return setUserError(!userError);
               }
-              if(props.available == 1){
+              if (props.available == 1) {
                 axios
                   .get(
                     `https://frost.runtime.kz/api/cart/add?productId=${props.id}&count=${count}`
@@ -60,9 +66,9 @@ export default function BuyButtonForm(props) {
                   .then((resp) => {
                     console.log(resp);
                   });
-                  props.setClickBuyBtn(false)
-              }else{
-                setAvailableError(!availableError)
+                props.setClickBuyBtn(false);
+              } else {
+                setAvailableError(!availableError);
               }
             }}
             className="addBasket__column-btn"
