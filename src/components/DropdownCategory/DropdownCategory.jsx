@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
 import "./DropdownCategory.css";
 import dropdownIcon from "../../images/drop-icon.png";
+import { useDispatch } from "react-redux";
+import { getGenerationsData, getModelsData } from "../../store/filterSlice";
 
 export default function DropdownCategory(props) {
   const [dropdown, setDropdown] = useState(false);
   let [items, setItems] = useState(props.items);
   let [category, setCategory] = useState(null);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    setItems([{id: 'all', name: props.title}, ...props.items]);
+    setItems([{ id: "all", name: props.title }, ...props.items]);
     setCategory(props.title);
   }, [props.items]);
 
-  let num = 0;
-  props.items.forEach((el) => {
-    if (el.name == props.title) {
-      num++;
-    }
-  });
+  //   let num = 0;
+  //   props.items.forEach((el) => {
+  //     if (el.name == props.title) {
+  //       num++;
+  //     }
+  //   });
   return (
     <div className="parent">
       <p
@@ -45,7 +50,7 @@ export default function DropdownCategory(props) {
             </div>
           );
         })}
-        </div>
+      </div>
     </div>
   );
 }

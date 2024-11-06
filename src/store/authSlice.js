@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const initialState = {
   user: null,
@@ -16,9 +17,6 @@ export const authSlice = createSlice({
     },
     setUser(state, action) {
       if (state.tokenInfo) {
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + state.tokenInfo;
-
         state.user = action.payload;
       }
     },
@@ -48,12 +46,15 @@ export function signIn(username, password) {
 }
 export function getUser() {
   return function (dispatch) {
-    axios
-      .post("https://frost.runtime.kz/api/auth/user", {}, {})
-      .then((resp) => {
-        // console.log(resp)
-        dispatch(setUser(resp.data));
-      });
+    const token = useSelector((state) => state.auth.tokenInfo);
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+      axios
+        .post("https://frost.runtime.kz/api/auth/user", {}, {})
+        .then((resp) => {
+          dispatch(setUser(resp.data));
+        });
+    }
   };
 }
 

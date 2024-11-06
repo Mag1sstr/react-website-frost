@@ -3,58 +3,44 @@ import DropdownCategory from "../DropdownCategory/DropdownCategory";
 import "./CategorySection.css";
 import { useEffect, useState } from "react";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getBrandData,
+  getGenerationsData,
+  getModelsData,
+  setGenerationData,
+  setModelsData,
+} from "../../store/filterSlice";
 export default function CategorySection(props) {
-
-  const [brandData, setBrandData] = useState([]);
-  const [modelsData, setModelsData] = useState([]);
-  const [generationsData, setGenerationsData] = useState([]);
-
-  // GET - axios.get() -> Promise
-  // POST - axios.post() -> Promise
-
-  // axios
-  //   .get('https://frost.runtime.kz/api/brands')
-  //   .then(function (response) {
-  //     const brand = response.data
-  //     setBrandData(brand)
-  //   })
+  //  const [brandData, setBrandData] = useState([])
+  //  const [modelsData, setModelsData] = useState([])
+  //  const [generationsData, setGenerationsData] = useState([])
+  const dispatch = useDispatch();
+  const brandData = useSelector((state) => state.filter.brandData);
+  const modelsData = useSelector((state) => state.filter.modelsData);
+  const generationsData = useSelector((state) => state.filter.generationsData);
 
   useEffect(() => {
-    const apiUrl = "https://frost.runtime.kz/api/brands";
-    axios.get(apiUrl).then((resp) => {
-      const data = resp.data;
-      setBrandData(data);
-    });
-  }, [setBrandData]);
-
+    dispatch(getBrandData());
+  }, []);
   function brandChange(brandId) {
     if (brandId === "all") {
-      setModelsData([]);
-      setGenerationsData([]);
+      dispatch(setModelsData([]));
+      dispatch(setGenerationData([]));
     } else {
-      axios
-        .get(`https://frost.runtime.kz/api/models?brandId=${brandId}`)
-        .then((resp) => {
-          const data = resp.data;
-          setModelsData(data);
-        });
-        props.getModelId('all')
-        props.setCurrentPage(1)
+      dispatch(getModelsData(brandId));
+      props.getModelId("all");
+      props.setCurrentPage(1);
     }
     props.getBrandId(brandId);
   }
   function modelChange(modelId) {
-    if (modelId == "all") {
-      setGenerationsData([]);
+    if (modelId === "all") {
+      dispatch(setGenerationData([]));
     } else {
-      axios
-        .get(`https://frost.runtime.kz/api/generations?modelId=${modelId}`)
-        .then((resp) => {
-          const data = resp.data;
-          setGenerationsData(data);
-        });
-        props.getGenerationId('all')
-        props.setCurrentPage(1)
+      dispatch(getGenerationsData(modelId));
+      props.getGenerationId("all");
+      props.setCurrentPage(1);
     }
     props.getModelId(modelId);
   }
@@ -64,6 +50,56 @@ export default function CategorySection(props) {
   function inputChange(value) {
     props.getInputValue(value);
   }
+  // GET - axios.get() -> Promise
+  // POST - axios.post() -> Promise
+
+  //  useEffect(() => {
+  //     const apiUrl = "https://frost.runtime.kz/api/brands"
+  //     axios.get(apiUrl).then((resp) => {
+  //        const data = resp.data
+  //        setBrandData(data)
+  //     })
+  //  }, [setBrandData])
+
+  //  console.log(brandData)
+
+  //  function brandChange(brandId) {
+  //     if (brandId === "all") {
+  //        setModelsData([])
+  //        setGenerationsData([])
+  //     } else {
+  //        axios
+  //           .get(`https://frost.runtime.kz/api/models?brandId=${brandId}`)
+  //           .then((resp) => {
+  //              const data = resp.data
+  //              setModelsData(data)
+  //           })
+  //        props.getModelId("all")
+  //        props.setCurrentPage(1)
+  //     }
+  //     props.getBrandId(brandId)
+  //  }
+  //  function modelChange(modelId) {
+  //     if (modelId == "all") {
+  //        setGenerationsData([])
+  //     } else {
+  //        axios
+  //           .get(`https://frost.runtime.kz/api/generations?modelId=${modelId}`)
+  //           .then((resp) => {
+  //              const data = resp.data
+  //              setGenerationsData(data)
+  //           })
+  //        props.getGenerationId("all")
+  //        props.setCurrentPage(1)
+  //     }
+  //     props.getModelId(modelId)
+  //  }
+  //  function generationChange(generationId) {
+  //     props.getGenerationId(generationId)
+  //  }
+  //  function inputChange(value) {
+  //     props.getInputValue(value)
+  //  }
   return (
     <div className="product__conteiner">
       <div className="category__section">

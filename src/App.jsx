@@ -14,12 +14,8 @@ import { getUser } from "./store/authSlice";
 import axios from "axios";
 
 function App() {
-  const token = useSelector((state) => state.auth.tokenInfo);
   const dispatch = useDispatch();
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-    dispatch(getUser());
-  }
+  dispatch(getUser());
 
   return (
     <>
