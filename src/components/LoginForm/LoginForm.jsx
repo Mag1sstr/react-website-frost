@@ -76,8 +76,8 @@ export default function LoginForm(props) {
                         dispatch(
                            signIn(loginValue.username, loginValue.password)
                         )
-                        dispatch(getUser())
-                        // dispatch(getUser)
+                        // dispatch(getUser())
+
                         props.getClickLoginModal(false)
                      }
                   }}
