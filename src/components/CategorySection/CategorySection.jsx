@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 import InputCheckbox from "../InputCheckbox/InputCheckbox";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getBrandChange,
   getBrandData,
-  getGenerationsData,
-  getModelsData,
+  getGenerationChange,
+  //  getGenerationsData,
+  getModelChange,
+  //  getModelsData,
   setGenerationData,
   setModelsData,
 } from "../../store/filterSlice";
@@ -23,33 +26,35 @@ export default function CategorySection(props) {
   useEffect(() => {
     dispatch(getBrandData());
   }, []);
-  function brandChange(brandId) {
-    if (brandId === "all") {
-      dispatch(setModelsData([]));
-      dispatch(setGenerationData([]));
-    } else {
-      dispatch(getModelsData(brandId));
-      props.getModelId("all");
-      props.setCurrentPage(1);
-    }
-    props.getBrandId(brandId);
-  }
-  function modelChange(modelId) {
-    if (modelId === "all") {
-      dispatch(setGenerationData([]));
-    } else {
-      dispatch(getGenerationsData(modelId));
-      props.getGenerationId("all");
-      props.setCurrentPage(1);
-    }
-    props.getModelId(modelId);
-  }
-  function generationChange(generationId) {
-    props.getGenerationId(generationId);
-  }
+
+  // function brandChange(brandId) {
+  //   if (brandId === "all") {
+  //     dispatch(setModelsData([]));
+  //     dispatch(setGenerationData([]));
+  //   } else {
+  //     dispatch(getModelsData(brandId));
+  //     props.getModelId("all");
+  //     props.setCurrentPage(1);
+  //   }
+  //   props.getBrandId(brandId);
+  // }
+  // function modelChange(modelId) {
+  //   if (modelId === "all") {
+  //     dispatch(setGenerationData([]));
+  //   } else {
+  //     dispatch(getGenerationsData(modelId));
+  //     props.getGenerationId("all");
+  //     props.setCurrentPage(1);
+  //   }
+  //   props.getModelId(modelId);
+  // }
+  // function generationChange(generationId) {
+  //   props.getGenerationId(generationId);
+  // }
   function inputChange(value) {
     props.getInputValue(value);
   }
+
   // GET - axios.get() -> Promise
   // POST - axios.post() -> Promise
 
@@ -114,7 +119,10 @@ export default function CategorySection(props) {
               <DropdownCategory
                 title="Все марки"
                 items={brandData}
-                onChange={brandChange}
+                onChange={function (brandId) {
+                  dispatch(getBrandChange(brandId));
+                  props.getBrandId(brandId);
+                }}
               />
             </div>
             <div className="category__item">
@@ -122,7 +130,10 @@ export default function CategorySection(props) {
               <DropdownCategory
                 title="Все модели"
                 items={modelsData}
-                onChange={modelChange}
+                onChange={function (modelId) {
+                  dispatch(getModelChange(modelId));
+                  props.getModelId(modelId);
+                }}
               />
             </div>
             <div className="category__item">
@@ -130,7 +141,10 @@ export default function CategorySection(props) {
               <DropdownCategory
                 title="Все поколения"
                 items={generationsData}
-                onChange={generationChange}
+                onChange={function (generationId) {
+                  // dispatch(getGenerationChange());
+                  props.getGenerationId(generationId);
+                }}
               />
             </div>
           </div>

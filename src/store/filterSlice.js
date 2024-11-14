@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useSelector } from "react-redux";
 const initialState = {
   brandData: [],
   modelsData: [],
   generationsData: [],
+  brandId: "all",
+  modelId: "all",
+  generationId: "all",
 };
 export const filterSlice = createSlice({
   name: "filterSlice",
@@ -21,8 +24,55 @@ export const filterSlice = createSlice({
     setGenerationData(state, action) {
       state.generationsData = action.payload;
     },
+    brandChange(state, action) {
+      state.brandId = action.payload;
+    },
+    modelChange(state, action) {
+      state.modelId = action.payload;
+    },
+    generationChange(state, action) {
+      state.generationId = action.payload;
+    },
   },
 });
+
+export function getBrandChange(id) {
+  return function (dispatch) {
+    if (id == "all") {
+      dispatch(setModelsData([]));
+      dispatch(setGenerationData([]));
+    } else {
+      axios
+        .get(`https://frost.runtime.kz/api/models?brandId=${id}`)
+        .then((resp) => {
+          const data = resp.data;
+          dispatch(setModelsData(data));
+
+          console.log(data);
+        });
+    }
+  };
+}
+export function getModelChange(id) {
+  return function (dispatch) {
+    if (id == "all") {
+      dispatch(setGenerationData([]));
+    } else {
+      axios
+        .get(`https://frost.runtime.kz/api/generations?modelId=${id}`)
+        .then((resp) => {
+          const data = resp.data;
+          dispatch(setGenerationData(data));
+        });
+    }
+  };
+}
+export function getGenerationChange(id) {
+  return function (dispatch) {
+    props.getGenerationId(generationId);
+  };
+}
+
 export function getBrandData() {
   return function (dispatch) {
     const apiUrl = "https://frost.runtime.kz/api/brands";
@@ -32,32 +82,33 @@ export function getBrandData() {
     });
   };
 }
-export function getModelsData(brandId) {
-  return function (dispatch) {
-    axios
-      .get(`https://frost.runtime.kz/api/models?brandId=${brandId}`)
-      .then((resp) => {
-        const data = resp.data;
-        dispatch(setModelsData(data));
-      });
-  };
-}
-export function getGenerationsData(modelId) {
-  return function (dispatch) {
-    axios
-      .get(`https://frost.runtime.kz/api/generations?modelId=${modelId}`)
-      .then((resp) => {
-        const data = resp.data;
-        dispatch(setGenerationData(data));
-      });
-  };
-}
+// export function getModelsData() {
+//    //  console.log(brandId)
 
-export const {
-  setBrandData,
-  brandChange,
-  setModelsData,
-  modelChange,
-  setGenerationData,
-} = filterSlice.actions;
+//    return function (dispatch) {
+//       const brandId = useSelector((state) => state.filter.brandId)
+//       console.log(brandId)
+//       if (brandId !== "all") {
+//          axios
+//             .get(`https://frost.runtime.kz/api/models?brandId=${brandId}`)
+//             .then((resp) => {
+//                const data = resp.data
+//                dispatch(setModelsData(data))
+//             })
+//       }
+//    }
+// }
+// export function getGenerationsData(modelId) {
+//    return function (dispatch) {
+//       axios
+//          .get(`https://frost.runtime.kz/api/generations?modelId=${modelId}`)
+//          .then((resp) => {
+//             const data = resp.data
+//             dispatch(setGenerationData(data))
+//          })
+//    }
+// }
+
+export const { setBrandData, setModelsData, setGenerationData, brandChange } =
+  filterSlice.actions;
 export default filterSlice.reducer;
