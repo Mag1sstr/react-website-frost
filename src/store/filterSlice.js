@@ -5,9 +5,6 @@ const initialState = {
   brandData: [],
   modelsData: [],
   generationsData: [],
-  brandId: "all",
-  modelId: "all",
-  generationId: "all",
 };
 export const filterSlice = createSlice({
   name: "filterSlice",
@@ -23,15 +20,6 @@ export const filterSlice = createSlice({
 
     setGenerationData(state, action) {
       state.generationsData = action.payload;
-    },
-    brandChange(state, action) {
-      state.brandId = action.payload;
-    },
-    modelChange(state, action) {
-      state.modelId = action.payload;
-    },
-    generationChange(state, action) {
-      state.generationId = action.payload;
     },
   },
 });
@@ -67,11 +55,11 @@ export function getModelChange(id) {
     }
   };
 }
-export function getGenerationChange(id) {
-  return function (dispatch) {
-    props.getGenerationId(generationId);
-  };
-}
+// export function getGenerationChange(id) {
+//   return function (dispatch) {
+//     props.getGenerationId(generationId);
+//   };
+// }
 
 export function getBrandData() {
   return function (dispatch) {
@@ -82,33 +70,7 @@ export function getBrandData() {
     });
   };
 }
-// export function getModelsData() {
-//    //  console.log(brandId)
 
-//    return function (dispatch) {
-//       const brandId = useSelector((state) => state.filter.brandId)
-//       console.log(brandId)
-//       if (brandId !== "all") {
-//          axios
-//             .get(`https://frost.runtime.kz/api/models?brandId=${brandId}`)
-//             .then((resp) => {
-//                const data = resp.data
-//                dispatch(setModelsData(data))
-//             })
-//       }
-//    }
-// }
-// export function getGenerationsData(modelId) {
-//    return function (dispatch) {
-//       axios
-//          .get(`https://frost.runtime.kz/api/generations?modelId=${modelId}`)
-//          .then((resp) => {
-//             const data = resp.data
-//             dispatch(setGenerationData(data))
-//          })
-//    }
-// }
-
-export const { setBrandData, setModelsData, setGenerationData, brandChange } =
+export const { setBrandData, setModelsData, setGenerationData } =
   filterSlice.actions;
 export default filterSlice.reducer;

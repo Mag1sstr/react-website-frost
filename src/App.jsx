@@ -23,16 +23,13 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<ProductPage />} />
+
           <Route path={`/product/:id`} element={<BuyInfo />} />
 
           <Route path="/basket" element={<BasketPage />} />
 
           <Route path="/personal" element={<Personal />} />
         </Routes>
-        {/* <RegisterForm /> */}
-        {/* <LoginForm /> */}
-        {/* <ForgotPass /> */}
-        {/* <BuyButtonForm /> */}
       </BrowserRouter>
     </>
   );

@@ -7,12 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getBrandChange,
   getBrandData,
-  getGenerationChange,
-  //  getGenerationsData,
   getModelChange,
-  //  getModelsData,
-  setGenerationData,
-  setModelsData,
 } from "../../store/filterSlice";
 export default function CategorySection(props) {
   //  const [brandData, setBrandData] = useState([])
@@ -122,6 +117,7 @@ export default function CategorySection(props) {
                 onChange={function (brandId) {
                   dispatch(getBrandChange(brandId));
                   props.getBrandId(brandId);
+                  props.setCurrentPage(1);
                 }}
               />
             </div>
@@ -133,6 +129,7 @@ export default function CategorySection(props) {
                 onChange={function (modelId) {
                   dispatch(getModelChange(modelId));
                   props.getModelId(modelId);
+                  props.setCurrentPage(1);
                 }}
               />
             </div>
@@ -142,8 +139,8 @@ export default function CategorySection(props) {
                 title="Все поколения"
                 items={generationsData}
                 onChange={function (generationId) {
-                  // dispatch(getGenerationChange());
                   props.getGenerationId(generationId);
+                  props.setCurrentPage(1);
                 }}
               />
             </div>
